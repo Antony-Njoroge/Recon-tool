@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Excel Reconciliation Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .loader-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .progress-bar {
+      width: 300px;
+      background-color: #f3f3f3;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .progress-bar-fill {
+      width: 100%;
+      height: 20px;
+      background-color: #4caf50;
+      animation: loading 5s ease-out forwards;
+    }
+    @keyframes loading {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="form-section">
+    <h1>Upload Two Excel Files</h1>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+      File A: <input type="file" name="file_a"><br><br>
+      File B: <input type="file" name="file_b"><br><br>
+
+      <label for="primary_key">Select Primary Identifier:</label>
+      <select name="primary_key" required>
+        {% for col in columns %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+      </select><br><br>
+
+      <label for="secondary_keys">Select Secondary Identifiers (Ctrl+Click):</label><br>
+      <select name="secondary_keys" multiple size="5">
+        {% for col in columns %}
+          <option value="{{ col }}">{{ col }}</option>
+        {% endfor %}
+      </select><br><br>
+
+      <button type="submit">Reconcile & Download Report</button>
+    </form>
+  </div>
+
+  <div class="loader-container" id="loader">
+    <h2>Processing Your Files...</h2>
+    <p>Please wait while we reconcile your data.</p>
+    <div class="progress-bar">
+      <div class="progress-bar-fill"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", function () {
+      document.getElementById("form-section").style.display = "none";
+      document.getElementById("loader").style.display = "flex";
+    });
+  </script>
+
+</body>
+</html>
